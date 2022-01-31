@@ -1,109 +1,71 @@
 <?php
 
-namespace EscolaLms\Mattermost\Tests\Services;
+namespace EscolaLms\Jitsi\Tests\Services;
 
-use BadMethodCallException;
 use EscolaLms\Core\Tests\CreatesUsers;
-use EscolaLms\Mattermost\Tests\TestCase;
-use Exception;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-use GuzzleHttp\Client;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Exception\RequestException;
-use EscolaLms\Mattermost\Services\Contracts\MattermostServiceContract;
-use EscolaLms\Mattermost\Services\MattermostService;
+use EscolaLms\Jitsi\Tests\TestCase;
+use EscolaLms\Jitsi\Facades\Jitsi;
+use EscolaLms\Jitsi\Enum\PackageStatusEnum;
 
 class ServiceTest extends TestCase
 {
 
     use CreatesUsers;
 
-    private MattermostServiceContract $service;
     private $user;
 
     public function setUp(): void
     {
         parent::setUp();
         $this->user = $this->makeStudent();
-        $this->service = $this->app->make(MattermostServiceContract::class);
-        $this->mock->reset();
     }
 
-    public function testAddUser()
+    private function decodeJWT($token)
     {
-        $this->mock->append(new Response(200, ['Token' => 'Token'], 'Hello, World'));
-        $this->assertTrue($this->service->addUser($this->user));
+        return (json_decode(base64_decode(str_replace('_', '/', str_replace('-', '+', explode('.', $token)[1])))));
     }
 
-    public function testAddUserToTeam()
+    public function testServiceWithJwt()
     {
-        $this->mock->append(new Response(200, ['Token' => 'Token'], json_encode(["id" => 123])));
-        $this->mock->append(new Response(200, ['Token' => 'Token'], json_encode(["id" => 123])));
-        $this->mock->append(new Response(200, ['Token' => 'Token'], ""));
+        // public function getChannelData(User $user, string $channelDisplayName, bool $isModerator = false, array $configOverwrite = [], $interfaceConfigOverwrite = []): array
 
-        $this->assertTrue($this->service->addUserToTeam($this->user, "Courses"));
+        $config = config("jitsi");
+        $data = Jitsi::getChannelData($this->user, "Test Channel Name");
+        $jwt = $this->decodeJWT($data['data']['jwt']);
+
+        $this->assertEquals($data['data']['domain'], $config['host']);
+        $this->assertEquals($data['data']['userInfo']['email'], $this->user->email);
+        $this->assertEquals($jwt->user->email, $this->user->email);
+        $this->assertEquals($jwt->user->moderator, false);
     }
 
-    public function testAddUserToChannel()
+    public function testServiceWithJwtAndSettings()
     {
-        $this->mock->append(new Response(200, ['Token' => 'Token'], json_encode(["id" => 123])));
-        $this->mock->append(new Response(200, ['Token' => 'Token'], json_encode(["id" => 123])));
-        $this->mock->append(new Response(200, ['Token' => 'Token'], json_encode(["id" => 123])));
-        $this->mock->append(new Response(200, ['Token' => 'Token'], ""));
-        $this->mock->append(new Response(200, ['Token' => 'Token'], ""));
-        $this->mock->append(new Response(200, ['Token' => 'Token'], ""));
+        // public function getChannelData(User $user, string $channelDisplayName, bool $isModerator = false, array $configOverwrite = [], $interfaceConfigOverwrite = []): array
 
-        $this->assertTrue($this->service->addUserToChannel($this->user, "Courses"));
+        $config = config("jitsi");
+        $data = Jitsi::getChannelData($this->user, "Test Channel Name", true, ['foo' => 'bar'], ['bar' => 'foo']);
+
+        $jwt = $this->decodeJWT($data['data']['jwt']);
+
+        $this->assertEquals($data['data']['domain'], $config['host']);
+        $this->assertEquals($data['data']['userInfo']['email'], $this->user->email);
+        $this->assertEquals($jwt->user->email, $this->user->email);
+        $this->assertEquals($jwt->user->moderator, true);
+        $this->assertEquals($data['data']['configOverwrite'], ["foo" => "bar"]);
+        $this->assertEquals($data['data']['interfaceConfigOverwrite'], ["bar" => "foo"]);
     }
 
-    public function testGetOrCreateTeam()
+    public function testDisabledServiceWithJwt()
     {
-        $response = new Response(200, ['Token' => 'Token'], json_encode(["id" => 123]));
-        $this->mock->append($response);
+        // public function getChannelData(User $user, string $channelDisplayName, bool $isModerator = false, array $configOverwrite = [], $interfaceConfigOverwrite = []): array
 
-        $this->assertEquals($this->service->getOrCreateTeam("Team name"),  $response);
-    }
+        //$config = config("jitsi");
 
-    public function testGetOrCreateChannel()
-    {
-        $response = new Response(200, ['Token' => 'Token'], json_encode(["id" => 123]));
-        $this->mock->append($response);
-        $this->mock->append($response);
+        config(['jitsi.package_status' => PackageStatusEnum::DISABLED]);
 
-        $this->assertEquals($this->service->getOrCreateChannel("Team name", "channel name"),  $response);
-    }
 
-    public function testGetOrCreateUser()
-    {
-        $response = new Response(200, ['Token' => 'Token'], json_encode(["id" => 123]));
-        $this->mock->append($response);
-
-        $this->assertEquals($this->service->getOrCreateUser($this->user),  $response);
-    }
-
-    public function testSendMessage()
-    {
-        $response = new Response(200, ['Token' => 'Token'], json_encode(["id" => 123]));
-        $this->mock->append($response);
-        $this->mock->append($response);
-
-        $this->assertTrue($this->service->sendMessage("hello world", "Town Square"));
-    }
-
-    public function testGenerateUserCredentials()
-    {
-        $object = ["id" => 123];
-        $response = new Response(200, ['Token' => 'Token'], json_encode($object));
-        $this->mock->append($response);
-        $this->mock->append($response);
-
-        $response = $this->service->generateUserCredentials($this->user);
-
-        $this->assertEquals((array) $response['status'], $object);
-        $this->assertEquals((array) $response['user'], $object);
-        $this->assertNotNull($response['password']);
+        $data = Jitsi::getChannelData($this->user, "Test Channel Name");
+        $this->assertTrue(isset($data['error']));
     }
 }

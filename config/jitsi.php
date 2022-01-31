@@ -1,24 +1,12 @@
 <?php
 
-/**
- * This Driver is a Laravel integration for the package php-mattermost-driver
- * (https://github.com/gnello/php-mattermost-driver)
- *
- * For the full copyright and license information, please read the LICENSE.txt
- * file that was distributed with this source code. For the full list of
- * contributors, visit https://github.com/gnello/laravel-mattermost-driver/contributors
- *
- * God bless this mess too.
- *
- * @author Luca Agnello <luca@gnello.com>
- * @link https://api.mattermost.com/
- */
+use EscolaLms\Jitsi\Enum\PackageStatusEnum;
 
 return [
 
-    'host' => env('JITSI_HOST', 'localhost'),
-    'app_id' => env('JITSI_APP_ID', 'admin'),
-    'secret' => env('JITSI_APP_SECRET', 'secret'),
+    'host' => env('JITSI_HOST', 'meet-stage.escolalms.com'),
+    'app_id' => env('JITSI_APP_ID', 'meet-id'),
+    'secret' => env('JITSI_APP_SECRET', 'ZKGfn5kYsv47avM4'),
 
     'package_status' => PackageStatusEnum::ENABLED,
 

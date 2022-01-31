@@ -1,8 +1,7 @@
-# Mattermost
+# Jitsi
 
-Mattermost integration
+Jitsi integration
 
-[![swagger](https://img.shields.io/badge/documentation-swagger-green)](https://escolalms.github.io/Mattermost/)
 [![codecov](https://codecov.io/gh/EscolaLMS/Mattermost/branch/main/graph/badge.svg?token=NRAN4R8AGZ)](https://codecov.io/gh/EscolaLMS/Mattermost)
 [![phpunit](https://github.com/EscolaLMS/Mattermost/actions/workflows/test.yml/badge.svg)](https://github.com/EscolaLMS/Mattermost/actions/workflows/test.yml)
 [![downloads](https://img.shields.io/packagist/dt/escolalms/mattermost)](https://packagist.org/packages/escolalms/mattermost)
@@ -10,3 +9,90 @@ Mattermost integration
 [![downloads](https://img.shields.io/packagist/l/escolalms/mattermost)](https://packagist.org/packages/escolalms/mattermost)
 [![Maintainability](https://api.codeclimate.com/v1/badges/00725c6ea461fcfa2754/maintainability)](https://codeclimate.com/github/EscolaLMS/Mattermost/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/00725c6ea461fcfa2754/test_coverage)](https://codeclimate.com/github/EscolaLMS/Mattermost/test_coverage)
+
+This package introduce just a facade that you can use to generate parameters for jitsi player
+
+First you need to setup environmental config to point to Jitsi service - use either `env` file of Settings package
+
+```php
+return [
+    'host' => env('JITSI_HOST', 'meet-stage.escolalms.com'),
+    'app_id' => env('JITSI_APP_ID', 'meet-id'),
+    'secret' => env('JITSI_APP_SECRET', 'secret'),
+    'package_status' => PackageStatusEnum::ENABLED,
+];
+```
+
+If `app_id` or `secret` service will skip `JWT` token generation.
+
+Once you provide the above you can generate parameters, example from tinker
+
+```php
+\EscolaLms\Jitsi\Facades\Jitsi::getChannelData(App\Models\User::find(1), "czesc ziomku", true, ['logoImageUrl'=>'https://escola.pl/_next/image?url=%2Fimages%2Flogo-escola.svg&w=3840&q=75'])
+```
+
+would generate some thing like
+
+```php
+[
+     "data" => [
+       "domain" => "meet-stage.escolalms.com",
+       "roomName" => "czescZiomku",
+       "configOverwrite" => [
+         "logoImageUrl" => "https://escola.pl/_next/image?url=%2Fimages%2Flogo-escola.svg&w=3840&q=75",
+       ],
+       "interfaceConfigOverwrite" => [
+       ],
+       "userInfo" => [
+         "id" => 1,
+         "name" => "Osman Kanu",
+         "displayName" => "Osman Kanu",
+         "email" => "student@escola-lms.com",
+         "moderator" => true,
+       ],
+       "jwt" => "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJtZWV0LWlkIiwiYXVkIjoibWVldC1pZCIsInN1YiI6Im1lZXQtc3RhZ2UuZXNjb2xhbG1zLmNvbSIsImV4cCI6MTY0MzY1OTM1NCwicm9vbSI6ImN6ZXNjWmlvbWt1IiwidXNlciI6eyJpZCI6MSwibmFtZSI6Ik9zbWFuIEthbnUiLCJkaXNwbGF5TmFtZSI6Ik9zbWFuIEthbnUiLCJlbWFpbCI6InN0dWRlbnRAZXNjb2xhLWxtcy5jb20iLCJtb2RlcmF0b3IiOmZhbHNlfX0.xnFV-Kk63c3YRADzkSQLz6FP71yfEUO7Q53isFGkv_U",
+     ],
+     "host" => "meet-stage.escolalms.com",
+     "url" => "https://meet-stage.escolalms.com/czescZiomku?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJtZWV0LWlkIiwiYXVkIjoibWVldC1pZCIsInN1YiI6Im1lZXQtc3RhZ2UuZXNjb2xhbG1zLmNvbSIsImV4cCI6MTY0MzY1OTM1NCwicm9vbSI6ImN6ZXNjWmlvbWt1IiwidXNlciI6eyJpZCI6MSwibmFtZSI6Ik9zbWFuIEthbnUiLCJkaXNwbGF5TmFtZSI6Ik9zbWFuIEthbnUiLCJlbWFpbCI6InN0dWRlbnRAZXNjb2xhLWxtcy5jb20iLCJtb2RlcmF0b3IiOmZhbHNlfX0.xnFV-Kk63c3YRADzkSQLz6FP71yfEUO7Q53isFGkv_U",
+   ]
+```
+
+pass this object into endpoint that generates jitsi call. You should definitely [read the manual before](https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-web-sdk).
+
+Example
+
+```tsx
+import React from "react";
+import JitsiMeeting from "@jitsi/web-sdk/lib/components/JitsiMeeting";
+import type {
+  IJitsiMeetExternalApi,
+  IJitsiMeetingProps,
+} from "@jitsi/web-sdk/lib/types";
+
+const dataFromEndpoint = {
+  domain: "meet-stage.escolalms.com",
+  roomName: "czescZiomku",
+  configOverwrite: {},
+  interfaceConfigOverwrite: {},
+  userInfo: {
+    displayName: "Osman Kanu",
+    email: "student@escola-lms.com",
+  },
+  jwt: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJtZWV0LWlkIiwiYXVkIjoibWVldC1pZCIsInN1YiI6Im1lZXQtc3RhZ2UuZXNjb2xhbG1zLmNvbSIsImV4cCI6MTY0MzY1OTM1NCwicm9vbSI6ImN6ZXNjWmlvbWt1IiwidXNlciI6eyJpZCI6MSwibmFtZSI6Ik9zbWFuIEthbnUiLCJkaXNwbGF5TmFtZSI6Ik9zbWFuIEthbnUiLCJlbWFpbCI6InN0dWRlbnRAZXNjb2xhLWxtcy5jb20iLCJtb2RlcmF0b3IiOmZhbHNlfX0.xnFV-Kk63c3YRADzkSQLz6FP71yfEUO7Q53isFGkv_U",
+};
+
+const data: IJitsiMeetingProps = {
+  ...dataFromEndpoint,
+  onApiReady: (api) => console.log("api ready", api),
+};
+
+function App() {
+  return (
+    <div className="App">
+      <JitsiMeeting {...data} />
+    </div>
+  );
+}
+
+export default App;
+```

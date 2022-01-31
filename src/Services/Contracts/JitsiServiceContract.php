@@ -9,5 +9,5 @@ use Illuminate\Support\Facades\Auth;
 
 interface JitsiServiceContract
 {
-    public function getChannelData(User $user, string $channelName, bool $isModerator = false): array;
+    public function getChannelData(User $user, string $channelDisplayName, bool $isModerator = false, array $configOverwrite = [], $interfaceConfigOverwrite = []): array;
 }
