@@ -9,5 +9,5 @@ env:
 providers:
   - Laravel\Passport\PassportServiceProvider
   - Spatie\Permission\PermissionServiceProvider
-  - EscolaLms\Jitsi\EscolaLmsJitsitServiceProvider
+  - EscolaLms\Jitsi\EscolaLmsJitsiServiceProvider
   - EscolaLms\Settings\EscolaLmsSettingsServiceProvider
