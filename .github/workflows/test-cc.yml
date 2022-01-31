@@ -71,4 +71,4 @@ jobs:
       - name: Upload
         run: ./cc-test-reporter upload-coverage -i codeclimate.0.json
         env:
-          CC_TEST_REPORTER_ID: 3a97184cabdd82cad3cb36e0abb3f9586b9872fecd373fb7b7fcbfa82ef12d75
+          CC_TEST_REPORTER_ID: 22c0c19cd6d3400f27aa0b94fdef59330cb28a87e71e72c2d3d998d355cbe63e

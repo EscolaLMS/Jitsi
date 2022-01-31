@@ -7,12 +7,12 @@ Jitsi integration
 [![downloads](https://img.shields.io/packagist/dt/escolalms/jitsi)](https://packagist.org/packages/escolalms/jitsi)
 [![downloads](https://img.shields.io/packagist/v/escolalms/jitsi)](https://packagist.org/packages/escolalms/jitsi)
 [![downloads](https://img.shields.io/packagist/l/escolalms/jitsi)](https://packagist.org/packages/escolalms/jitsi)
-[![Maintainability](https://api.codeclimate.com/v1/badges/00725c6ea461fcfa2754/maintainability)](https://codeclimate.com/github/EscolaLMS/Jitsi/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/00725c6ea461fcfa2754/test_coverage)](https://codeclimate.com/github/EscolaLMS/Jitsi/test_coverage)
+[![Maintainability](https://api.codeclimate.com/v1/badges/0fe584397e06ef32618f/maintainability)](https://codeclimate.com/github/EscolaLMS/Jitsi/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/0fe584397e06ef32618f/test_coverage)](https://codeclimate.com/github/EscolaLMS/Jitsi/test_coverage)
 
 This package introduce just a facade that you can use to generate parameters for jitsi player
 
-First you need to setup environmental config to point to Jitsi service - use either `env` file of Settings package
+First you need to setup environmental config to point to Jitsi service - use either `env` file or [Settings package](https://github.com/EscolaLMS/Settings) (settings should be visible in the settings endpoint)
 
 ```php
 return [
