@@ -44,7 +44,7 @@ class JitsiService implements JitsiServiceContract
         return $user_data;
     }
 
-    private function generateJwt($user, $room = '*', $isModerator = false): string
+    private function generateJwt($user, $room = '*', $isModerator = false, $expireInMinutes = 60): string
     {
 
         $user_data = $this->getUserData($user, $isModerator);
@@ -53,7 +53,7 @@ class JitsiService implements JitsiServiceContract
             'iss' => $this->config['app_id'],
             'aud' => $this->config['app_id'],
             'sub' => $this->config['host'],
-            'exp' => now()->addMinutes(60)->timestamp,
+            'exp' => now()->addMinutes($expireInMinutes)->timestamp,
             'room' => $room,
             'user' =>  $user_data,
         ];
