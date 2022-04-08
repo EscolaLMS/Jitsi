@@ -6,9 +6,7 @@ use EscolaLms\Auth\Models\User;
 use EscolaLms\Jitsi\Enum\PackageStatusEnum;
 use EscolaLms\Jitsi\Services\Contracts\JitsiServiceContract;
 use Gnello\Mattermost\Driver;
-use Gnello\Mattermost\Laravel\Facades\Mattermost;
 use Illuminate\Support\Str;
-use Psr\Http\Message\ResponseInterface;
 use Firebase\JWT\JWT;
 use Illuminate\Support\Facades\Storage;
 
@@ -48,7 +46,6 @@ class JitsiService implements JitsiServiceContract
     {
 
         $user_data = $this->getUserData($user, $isModerator);
-
         $payload = [
             'iss' => $this->config['app_id'],
             'aud' => $this->config['app_id'],
@@ -61,11 +58,11 @@ class JitsiService implements JitsiServiceContract
         return JWT::encode($payload, $this->config['secret']);
     }
 
-    /** 
-     * Generates data to pass for Jitsi player 
-     * 
-     * @param \EscolaLms\Auth\Models\User $user 
-     * @param string $channelDisplayName name of the channel, will be converted with cammelCase 
+    /**
+     * Generates data to pass for Jitsi player
+     *
+     * @param \EscolaLms\Auth\Models\User $user
+     * @param string $channelDisplayName name of the channel, will be converted with cammelCase
      * @param bool $isModerator, is this user moderator
      * @param array $configOverwrite, https://github.com/jitsi/jitsi-meet/blob/master/config.js
      * @param array $interfaceConfigOverwrite, https://github.com/jitsi/jitsi-meet/blob/master/interface_config.js
@@ -73,7 +70,7 @@ class JitsiService implements JitsiServiceContract
      * 'data' is user for react component, iframe API https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-web-sdk
      * 'domain' is self explanatory
      * 'url' that you can run in open in new window mode, (not recommended)
-     * 
+     *
      */
     public function getChannelData(User $user, string $channelDisplayName, bool $isModerator = false, array $configOverwrite = [], $interfaceConfigOverwrite = []): array
     {
