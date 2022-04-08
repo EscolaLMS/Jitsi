@@ -22,7 +22,7 @@ class JitsiService implements JitsiServiceContract
 
     private function shouldGenerateJWT(): bool
     {
-        return !(empty($this->config["app_id"]) &&  empty($this->config["secret"]));
+        return !(empty($this->config["app_id"]) && empty($this->config["secret"]));
     }
 
     private function getUserData($user, $isModerator = false): array
@@ -54,8 +54,7 @@ class JitsiService implements JitsiServiceContract
             'room' => $room,
             'user' =>  $user_data,
         ];
-
-        return JWT::encode($payload, $this->config['secret']);
+        return JWT::encode($payload, $this->config['secret'], 'HS256');
     }
 
     /**
