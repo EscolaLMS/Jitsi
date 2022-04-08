@@ -30,8 +30,8 @@ class EscolaLmsJitsiServiceProvider extends ServiceProvider
     {
         AdministrableConfig::registerConfig(self::CONFIG_KEY . '.package_status', ['required', 'string', 'in:' . implode(',', PackageStatusEnum::getValues())], false);
         AdministrableConfig::registerConfig(self::CONFIG_KEY . '.host', ['required', 'string'], true);
-        AdministrableConfig::registerConfig(self::CONFIG_KEY . '.app_id', ['required', 'string'], false);
-        AdministrableConfig::registerConfig(self::CONFIG_KEY . '.secret', ['required', 'string'], false);
+        AdministrableConfig::registerConfig(self::CONFIG_KEY . '.app_id', ['nullable', 'string'], false);
+        AdministrableConfig::registerConfig(self::CONFIG_KEY . '.secret', ['nullable', 'string'], false);
     }
 
 
