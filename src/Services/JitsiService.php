@@ -22,7 +22,7 @@ class JitsiService implements JitsiServiceContract
 
     private function shouldGenerateJWT(): bool
     {
-        return !(empty($this->config["app_id"]) && empty($this->config["secret"]));
+        return !(!$this->config["app_id"] && !$this->config["secret"]);
     }
 
     private function getUserData($user, $isModerator = false): array
