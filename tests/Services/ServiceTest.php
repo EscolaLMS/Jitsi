@@ -6,11 +6,12 @@ use EscolaLms\Core\Tests\CreatesUsers;
 use EscolaLms\Jitsi\Tests\TestCase;
 use EscolaLms\Jitsi\Facades\Jitsi;
 use EscolaLms\Jitsi\Enum\PackageStatusEnum;
+use Illuminate\Foundation\Testing\WithFaker;
 
 class ServiceTest extends TestCase
 {
 
-    use CreatesUsers;
+    use CreatesUsers, WithFaker;
 
     private $user;
 
@@ -30,7 +31,7 @@ class ServiceTest extends TestCase
         // public function getChannelData(User $user, string $channelDisplayName, bool $isModerator = false, array $configOverwrite = [], $interfaceConfigOverwrite = []): array
 
         $config = config("jitsi");
-        $data = Jitsi::getChannelData($this->user, "Test Channel Name");
+        $data = Jitsi::getChannelData($this->user, $this->faker->text(15));
         $jwt = $this->decodeJWT($data['data']['jwt']);
 
         $this->assertEquals($data['data']['domain'], $config['host']);

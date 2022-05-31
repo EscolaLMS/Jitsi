@@ -116,6 +116,6 @@ class JitsiService implements JitsiServiceContract
 
     private function getChannelSlug(string $channelName): string
     {
-        return Str::camel($channelName);
+        return iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', Str::camel($channelName));
     }
 }
