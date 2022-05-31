@@ -10,16 +10,20 @@ Jitsi integration
 [![Maintainability](https://api.codeclimate.com/v1/badges/0fe584397e06ef32618f/maintainability)](https://codeclimate.com/github/EscolaLMS/Jitsi/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/0fe584397e06ef32618f/test_coverage)](https://codeclimate.com/github/EscolaLMS/Jitsi/test_coverage)
 
+
+## What does it do
 This package introduce just a facade that you can use to generate parameters for jitsi player
 
-First you need to setup environmental config to point to Jitsi service - use either `env` file or [Settings package](https://github.com/EscolaLMS/Settings) (settings should be visible in the settings endpoint)
+## Installing
+- `composer require escolalms/jitsi`
+- Setup environmental config to point to Jitsi service - use either `env` file or [Settings package](https://github.com/EscolaLMS/Settings) (settings should be visible in the settings endpoint)
 
 ```php
 return [
     'host' => env('JITSI_HOST', 'meet-stage.escolalms.com'),
     'app_id' => env('JITSI_APP_ID', 'meet-id'),
     'secret' => env('JITSI_APP_SECRET', 'secret'),
-    'package_status' => PackageStatusEnum::ENABLED,
+    'package_status' => 'enabled',
 ];
 ```
 
@@ -96,3 +100,8 @@ function App() {
 
 export default App;
 ```
+
+## Tests
+
+Run `./vendor/bin/phpunit --filter 'EscolaLms\\Jitsi\\Tests'` to run tests. See [tests](tests) folder as it's quite good staring point as documentation appendix.
+
