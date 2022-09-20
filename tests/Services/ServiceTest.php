@@ -3,6 +3,7 @@
 namespace EscolaLms\Jitsi\Tests\Services;
 
 use EscolaLms\Core\Tests\CreatesUsers;
+use EscolaLms\Jitsi\Helpers\StringHelper;
 use EscolaLms\Jitsi\Tests\TestCase;
 use EscolaLms\Jitsi\Facades\Jitsi;
 use EscolaLms\Jitsi\Enum\PackageStatusEnum;
@@ -68,5 +69,13 @@ class ServiceTest extends TestCase
 
         $data = Jitsi::getChannelData($this->user, "Test Channel Name");
         $this->assertTrue(isset($data['error']));
+    }
+
+    public function testGenerateSlugForJitsi()
+    {
+        $slug = 'Test Słowny 123 Śękowy';
+        $convertSlug = StringHelper::convertToJitsiSlug($slug);
+        $this->assertTrue($slug !== $convertSlug);
+        $this->assertTrue('testslowny123sekowy' === $convertSlug);
     }
 }
