@@ -6,7 +6,7 @@ use EscolaLms\Jitsi\Enum\JitsiEnum;
 
 class StringHelper
 {
-    public function convertToJitsiSlug(string $str, array $options = []): string
+    public static function convertToJitsiSlug(string $str, array $options = []): string
     {
         // Make sure string is in UTF-8 and strip invalid UTF-8 characters
         $str = mb_convert_encoding($str, 'UTF-8', mb_list_encodings());
