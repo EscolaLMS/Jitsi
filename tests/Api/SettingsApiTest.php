@@ -5,7 +5,6 @@ namespace EscolaLms\Jitsi\Tests\Api;
 use EscolaLms\Core\Tests\ApiTestTrait;
 use EscolaLms\Core\Tests\CreatesUsers;
 use EscolaLms\Jitsi\Enum\PackageStatusEnum;
-use EscolaLms\Jitsi\EscolaLmsJitsiServiceProvider;
 use EscolaLms\Jitsi\Providers\SettingsServiceProvider;
 use EscolaLms\Jitsi\Tests\TestCase;
 use EscolaLms\Settings\Database\Seeders\PermissionTableSeeder;
