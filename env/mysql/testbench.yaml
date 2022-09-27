@@ -12,3 +12,6 @@ providers:
   - Spatie\Permission\PermissionServiceProvider
   - EscolaLms\Jitsi\EscolaLmsJitsiServiceProvider
   - EscolaLms\Settings\EscolaLmsSettingsServiceProvider
+  - EscolaLms\Core\EscolaLmsServiceProvider
+  - EscolaLms\Auth\EscolaLmsAuthServiceProvider
+  - EscolaLms\Categories\EscolaLmsCategoriesServiceProvider
