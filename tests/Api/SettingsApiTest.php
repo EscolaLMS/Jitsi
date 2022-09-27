@@ -10,6 +10,7 @@ use EscolaLms\Jitsi\Tests\TestCase;
 use EscolaLms\Settings\Database\Seeders\PermissionTableSeeder;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Config;
 
 class SettingsApiTest extends TestCase
 {
@@ -24,6 +25,7 @@ class SettingsApiTest extends TestCase
         }
 
         $this->seed(PermissionTableSeeder::class);
+        Config::set('escola_settings.use_database', true);
 
         $this->user = config('auth.providers.users.model')::factory()->create();
         $this->user->guard_name = 'api';
