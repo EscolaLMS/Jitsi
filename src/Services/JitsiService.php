@@ -67,7 +67,8 @@ class JitsiService implements JitsiServiceContract
         }
 
         $channelName = $this->getChannelSlug($channelDisplayName);
-        $className = env('VIDEO_CONFERENCE_MODE', JitsiEnum::DEFAULT_MODE) . 'VideoConferenceModeStrategy';
+        $className = ucfirst(mb_strtolower(env('VIDEO_CONFERENCE_MODE', JitsiEnum::DEFAULT_MODE))) .
+            'VideoConferenceModeStrategy';
         $jwt = StrategyHelper::useStrategyPattern(
             $className,
             'VideoConferenceModeStrategy',

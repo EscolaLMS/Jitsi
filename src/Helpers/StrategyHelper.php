@@ -31,7 +31,6 @@ class StrategyHelper
         $strategyHelper = new StrategyHelper($baseStrategyName);
         $class = $strategyHelper->namespace . '\\' . $className;
         $baseStrategyClass = $strategyHelper->namespace . '\\' . $baseStrategyName;
-        dd($class);
         if (
             class_exists($class) &&
             class_exists($baseStrategyClass) &&
