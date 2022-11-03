@@ -22,9 +22,14 @@ class JitsiVideoConferenceModeStrategy implements VideoConferenceModeStrategyCon
 
     public function generateJwt(array $data): ?string
     {
-        if (count($data) >= 3 && $this->shouldGenerateJWT()) {
+        if (isset($data[0]) && $this->shouldGenerateJWT()) {
             $this->jitsiService->setConfig($this->config);
-            return $this->jitsiService->generateJwt($data[0], $data[1], $data[2], $data[3] ?? 60);
+            return $this->jitsiService->generateJwt(
+                $data[0],
+                $data[1] ?? '*',
+                $data[2] ?? false,
+                $data[3] ?? 60
+            );
         }
         return null;
     }

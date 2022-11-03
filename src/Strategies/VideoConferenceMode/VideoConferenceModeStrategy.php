@@ -15,8 +15,8 @@ class VideoConferenceModeStrategy
         $this->videoConferenceModeStrategy = $videoConferenceModeStrategy;
     }
 
-    public function generateJwt($a): ?string
+    public function generateJwt(array $data): ?string
     {
-        return $this->videoConferenceModeStrategy->generateJwt($a);
+        return $this->videoConferenceModeStrategy->generateJwt($data);
     }
 }

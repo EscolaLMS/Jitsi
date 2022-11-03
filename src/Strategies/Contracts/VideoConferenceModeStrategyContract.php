@@ -4,5 +4,5 @@ namespace EscolaLms\Jitsi\Strategies\Contracts;
 
 interface VideoConferenceModeStrategyContract
 {
-//    public function generateJwt(): string;
+    public function generateJwt(array $data): ?string;
 }

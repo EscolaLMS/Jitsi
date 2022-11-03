@@ -18,9 +18,14 @@ class JaasVideoConferenceModeStrategy implements VideoConferenceModeStrategyCont
 
     public function generateJwt(array $data): ?string
     {
-        if (count($data) >= 3 && $this->shouldGenerateJWT()) {
+        if (isset($data[0]) && $this->shouldGenerateJWT()) {
             $this->jaasService->setConfig($this->config);
-            return $this->jaasService->generateJwt($data[0], $data[1], $data[2], $data[3] ?? 60);
+            return $this->jaasService->generateJwt(
+                $data[0],
+                $data[1] ?? '*',
+                $data[2] ?? false,
+                $data[3] ?? 60
+            );
         }
         return null;
     }
