@@ -4,6 +4,7 @@ namespace EscolaLms\Jitsi\Tests;
 
 
 
+use EscolaLms\Jitsi\Enum\PackageStatusEnum;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 use EscolaLms\Jitsi\EscolaLmsJitsiServiceProvider;
