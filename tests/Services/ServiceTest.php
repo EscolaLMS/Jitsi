@@ -33,7 +33,6 @@ class ServiceTest extends TestCase
     public function testServiceWithJwtJitsi()
     {
         // public function getChannelData(User $user, string $channelDisplayName, bool $isModerator = false, array $configOverwrite = [], $interfaceConfigOverwrite = []): array
-
         putenv('VIDEO_CONFERENCE_MODE=jitsi');
         $config = config(env('VIDEO_CONFERENCE_MODE', JitsiEnum::DEFAULT_MODE));
         $data = Jitsi::getChannelData($this->user, $this->faker->text(15));
