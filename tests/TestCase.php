@@ -46,5 +46,11 @@ class TestCase extends CoreTestCase
         $app['config']->set('jitsi.app_id', 'app_id');
         $app['config']->set('jitsi.secret', 'secret');
         $app['config']->set('jitsi.host', 'localhost');
+
+        $app['config']->set('jitsi.host', 'https://8x8.vc/');
+        $app['config']->set('jitsi.aud', 'jitsi');
+        $app['config']->set('jitsi.iss', 'chat');
+        $app['config']->set('jitsi.sub', '');
+        $app['config']->set('jitsi.kid', '');
     }
 }
