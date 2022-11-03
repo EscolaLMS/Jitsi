@@ -36,12 +36,16 @@ class ServiceTest extends TestCase
         putenv('VIDEO_CONFERENCE_MODE=jitsi');
         $config = config(env('VIDEO_CONFERENCE_MODE', JitsiEnum::DEFAULT_MODE));
         $data = Jitsi::getChannelData($this->user, $this->faker->text(15));
-        $jwt = $this->decodeJWT($data['data']['jwt']);
+        try {
+            $jwt = $this->decodeJWT($data['data']['jwt']);
 
-        $this->assertEquals($data['data']['domain'], $config['host']);
-        $this->assertEquals($data['data']['userInfo']['email'], $this->user->email);
-        $this->assertEquals($jwt->user->email, $this->user->email);
-        $this->assertEquals($jwt->user->moderator, false);
+            $this->assertEquals($data['data']['domain'], $config['host']);
+            $this->assertEquals($data['data']['userInfo']['email'], $this->user->email);
+            $this->assertEquals($jwt->user->email, $this->user->email);
+            $this->assertEquals($jwt->user->moderator, false);
+        } catch (\Exception $ex) {
+            dd($data);
+        }
     }
 
     public function testServiceWithJwtJaas()
