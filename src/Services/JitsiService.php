@@ -3,12 +3,14 @@
 namespace EscolaLms\Jitsi\Services;
 
 use EscolaLms\Auth\Models\User;
+use EscolaLms\Jitsi\Enum\JitsiEnum;
 use EscolaLms\Jitsi\Enum\PackageStatusEnum;
+use EscolaLms\Jitsi\Helpers\StrategyHelper;
 use EscolaLms\Jitsi\Services\Contracts\JitsiServiceContract;
 use Gnello\Mattermost\Driver;
-use Illuminate\Support\Str;
 use Firebase\JWT\JWT;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class JitsiService implements JitsiServiceContract
 {
@@ -17,34 +19,15 @@ class JitsiService implements JitsiServiceContract
 
     public function __construct()
     {
-        $this->config = config("jitsi");
+        $this->config = config(env('VIDEO_CONFERENCE_MODE', JitsiEnum::DEFAULT_MODE));
     }
 
-    private function shouldGenerateJWT(): bool
-    {
-        return !(!$this->config["app_id"] && !$this->config["secret"]);
-    }
-
-    private function getUserData($user, $isModerator = false): array
-    {
-        $user_data = [
-            'id' => $user->id,
-            'name' => "{$user->first_name} {$user->last_name}",
-            'displayName' => "{$user->first_name} {$user->last_name}",
-            'email' => $user->email,
-            "moderator" => $isModerator
-        ];
-
-        if (!empty($user->avatar_path)) {
-            $user_data['avatar'] = Storage::url($user->avatar_path);
-        }
-
-        return $user_data;
-    }
-
-    private function generateJwt($user, $room = '*', $isModerator = false, $expireInMinutes = 60): string
-    {
-
+    public function generateJwt(
+        User $user,
+        string $room = '*',
+        bool $isModerator = false,
+        int $expireInMinutes = 60
+    ): string {
         $user_data = $this->getUserData($user, $isModerator);
         $payload = [
             'iss' => $this->config['app_id'],
@@ -71,40 +54,41 @@ class JitsiService implements JitsiServiceContract
      * 'url' that you can run in open in new window mode, (not recommended)
      *
      */
-    public function getChannelData(User $user, string $channelDisplayName, bool $isModerator = false, array $configOverwrite = [], $interfaceConfigOverwrite = []): array
-    {
-
+    public function getChannelData(
+        User $user,
+        string $channelDisplayName,
+        bool $isModerator = false,
+        array $configOverwrite = [],
+        $interfaceConfigOverwrite = []
+    ): array {
         if ($this->config['package_status'] != PackageStatusEnum::ENABLED) {
+
             return ['error' => 'Package is disabled'];
         }
 
         $channelName = $this->getChannelSlug($channelDisplayName);
-
-        $jwt = $this->shouldGenerateJWT() ? $this->generateJwt($user, $channelName, $isModerator) : null;
-
+        $className = env('VIDEO_CONFERENCE_MODE', JitsiEnum::DEFAULT_MODE) . 'VideoConferenceModeStrategy';
+        $jwt = StrategyHelper::useStrategyPattern(
+            $className,
+            'VideoConferenceModeStrategy',
+            'generateJwt',
+            $user,
+            $channelName,
+            $isModerator
+        );
         $data = [
             "domain" => $this->config['host'],
             "roomName" => $channelName,
-            "configOverwrite" => array_merge([
-                /*
-                "startWithAudioMuted" => true,
-                "disableModeratorIndicator" => true,
-                "startScreenSharing" => true,
-                "enableEmailInStats" => false,
-                */], $configOverwrite),
-            "interfaceConfigOverwrite" => array_merge([
-                //"DISABLE_JOIN_LEAVE_NOTIFICATIONS" => true,
-            ], $interfaceConfigOverwrite),
+            "configOverwrite" => $configOverwrite,
+            "interfaceConfigOverwrite" => $interfaceConfigOverwrite,
             "userInfo" =>  [
                 'displayName' => "{$user->first_name} {$user->last_name}",
                 'email' => $user->email,
             ]
         ];
-
         if (!empty($jwt)) {
             $data['jwt'] = $jwt;
         }
-
 
         return [
             'data' => $data,
@@ -113,6 +97,27 @@ class JitsiService implements JitsiServiceContract
         ];
     }
 
+    public function setConfig(array $config): void
+    {
+        $this->config = $config;
+    }
+
+    protected function getUserData($user, $isModerator = false): array
+    {
+        $user_data = [
+            'id' => $user->id,
+            'name' => "{$user->first_name} {$user->last_name}",
+            'displayName' => "{$user->first_name} {$user->last_name}",
+            'email' => $user->email,
+            "moderator" => $isModerator
+        ];
+
+        if (!empty($user->avatar_path)) {
+            $user_data['avatar'] = Storage::url($user->avatar_path);
+        }
+
+        return $user_data;
+    }
 
     private function getChannelSlug(string $channelName): string
     {

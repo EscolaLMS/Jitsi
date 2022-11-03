@@ -6,8 +6,7 @@ use EscolaLms\Auth\Models\User;
 use Psr\Http\Message\ResponseInterface;
 use Illuminate\Support\Facades\Auth;
 
-
-interface JitsiServiceContract
+interface JaasServiceContract
 {
     public function getChannelData(
         User $user,
