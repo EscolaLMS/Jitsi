@@ -33,6 +33,7 @@ class JaasVideoConferenceModeStrategy implements VideoConferenceModeStrategyCont
     private function shouldGenerateJWT(): bool
     {
         return !(
+            !$this->config['jaas_host'] &&
             !$this->config['private_key'] &&
             !$this->config['kid'] &&
             !$this->config['iss'] &&

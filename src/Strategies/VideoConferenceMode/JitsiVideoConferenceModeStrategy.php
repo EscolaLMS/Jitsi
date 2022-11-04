@@ -2,12 +2,8 @@
 
 namespace EscolaLms\Jitsi\Strategies\VideoConferenceMode;
 
-use EscolaLms\Auth\Models\User;
-use EscolaLms\Jitsi\Helpers\StrategyHelper;
 use EscolaLms\Jitsi\Services\Contracts\JitsiServiceContract;
 use EscolaLms\Jitsi\Strategies\Contracts\VideoConferenceModeStrategyContract;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class JitsiVideoConferenceModeStrategy implements VideoConferenceModeStrategyContract
 {

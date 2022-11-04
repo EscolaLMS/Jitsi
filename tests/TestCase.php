@@ -46,14 +46,13 @@ class TestCase extends CoreTestCase
 
         $app['config']->set('jitsi.app_id', 'app_id');
         $app['config']->set('jitsi.secret', 'secret');
-        $app['config']->set('jitsi.host', 'localhost');
+        $app['config']->set('jitsi.jitsi_host', 'localhost');
         $app['config']->set('jitsi.package_status', PackageStatusEnum::ENABLED);
 
-        $app['config']->set('jaas.host', 'https://8x8.vc/');
+        $app['config']->set('jaas.jaas_host', 'localhost');
         $app['config']->set('jaas.aud', 'jitsi');
         $app['config']->set('jaas.iss', 'chat');
         $app['config']->set('jaas.sub', '');
         $app['config']->set('jaas.kid', '');
-        $app['config']->set('jaas.package_status', PackageStatusEnum::ENABLED);
     }
 }

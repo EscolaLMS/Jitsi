@@ -16,10 +16,12 @@ class JitsiService implements JitsiServiceContract
 {
     public Driver $driver;
     private array $config;
+    private string $mode;
 
     public function __construct()
     {
-        $this->config = config(env('VIDEO_CONFERENCE_MODE', JitsiEnum::DEFAULT_MODE));
+        $this->mode = $this->getMode();
+        $this->config = $this->mode ? config($this->mode) : config(JitsiEnum::DEFAULT_CONFIG);
     }
 
     public function generateJwt(
@@ -28,15 +30,20 @@ class JitsiService implements JitsiServiceContract
         bool $isModerator = false,
         int $expireInMinutes = 60
     ): string {
+        if (!$this->mode) {
+
+            return '';
+        }
         $user_data = $this->getUserData($user, $isModerator);
         $payload = [
             'iss' => $this->config['app_id'],
             'aud' => $this->config['app_id'],
-            'sub' => $this->config['host'],
+            'sub' => $this->config[$this->mode . '_host'],
             'exp' => now()->addMinutes($expireInMinutes)->timestamp,
             'room' => $room,
             'user' =>  $user_data,
         ];
+
         return JWT::encode($payload, $this->config['secret'], 'HS256');
     }
 
@@ -61,24 +68,16 @@ class JitsiService implements JitsiServiceContract
         array $configOverwrite = [],
         $interfaceConfigOverwrite = []
     ): array {
-        if ($this->config['package_status'] != PackageStatusEnum::ENABLED) {
+        if (
+            isset($this->config['package_status']) &&
+            (string)$this->config['package_status'] !== PackageStatusEnum::ENABLED
+        ) {
 
             return ['error' => 'Package is disabled'];
         }
-
         $channelName = $this->getChannelSlug($channelDisplayName);
-        $className = ucfirst(mb_strtolower(env('VIDEO_CONFERENCE_MODE', JitsiEnum::DEFAULT_MODE))) .
-            'VideoConferenceModeStrategy';
-        $jwt = StrategyHelper::useStrategyPattern(
-            $className,
-            'VideoConferenceModeStrategy',
-            'generateJwt',
-            $user,
-            $channelName,
-            $isModerator
-        );
         $data = [
-            "domain" => $this->config['host'],
+            "domain" => $this->config[$this->mode . '_host'],
             "roomName" => $channelName,
             "configOverwrite" => $configOverwrite,
             "interfaceConfigOverwrite" => $interfaceConfigOverwrite,
@@ -87,14 +86,27 @@ class JitsiService implements JitsiServiceContract
                 'email' => $user->email,
             ]
         ];
+        $jwt = '';
+        if ($this->mode) {
+            $className = ucfirst($this->mode) .
+                'VideoConferenceModeStrategy';
+            $jwt = StrategyHelper::useStrategyPattern(
+                $className,
+                'VideoConferenceModeStrategy',
+                'generateJwt',
+                $user,
+                $channelName,
+                $isModerator
+            );
+        }
         if (!empty($jwt)) {
             $data['jwt'] = $jwt;
         }
 
         return [
             'data' => $data,
-            'domain' => $this->config['host'],
-            'url' => "https://" . $this->config['host'] . "/" .  $channelName . (!empty($jwt)  ? "?jwt=" . $jwt : ""),
+            'domain' => $this->config[$this->mode . '_host'],
+            'url' => "https://" . $this->config[$this->mode . '_host'] . "/" .  $channelName . (!empty($jwt)  ? "?jwt=" . $jwt : ""),
         ];
     }
 
@@ -118,6 +130,33 @@ class JitsiService implements JitsiServiceContract
         }
 
         return $user_data;
+    }
+
+    /**
+     * Mode priorities Jaas -> self hosted(jitsi) -> meet.jitsy -> disabled
+     * @return string
+     */
+    private function getMode(): string
+    {
+        $jaasKeys = collect(['jaas_host', 'aud', 'iss', 'kid', 'private_key']);
+        $jaasConfigUse = true;
+        $jaasKeys->each(function (string $key) use (&$jaasConfigUse) {
+            if (!config('jaas.' . $key)) $jaasConfigUse = false;
+        });
+        if ($jaasConfigUse) {
+
+            return 'jaas';
+        }
+        $jitsiKeys = collect(['jitsi_host', 'app_id', 'secret']);
+        $jitsiConfigUse = true;
+        $jitsiKeys->each(function (string $key) use (&$jitsiConfigUse) {
+            if (!config('jitsi.' . $key)) $jitsiConfigUse = false;
+        });
+        if ($jitsiConfigUse) {
+
+            return 'jitsi';
+        }
+        return '';
     }
 
     private function getChannelSlug(string $channelName): string

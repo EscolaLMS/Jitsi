@@ -73,5 +73,5 @@ class JitsiEnum extends Enum
         'š' => 's', 'ū' => 'u', 'ž' => 'z',
     ];
 
-    public const DEFAULT_MODE = 'jitsi';
+    public const DEFAULT_CONFIG = 'jitsi';
 }

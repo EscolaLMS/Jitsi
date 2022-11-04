@@ -55,7 +55,7 @@ class SettingsApiTest extends TestCase
                         'value' => $packageStatus,
                     ],
                     [
-                        'key' => "$configKey.host",
+                        'key' => "$configKey.jitsi_host",
                         'value' => $host,
                     ],
                     [
@@ -65,10 +65,6 @@ class SettingsApiTest extends TestCase
                     [
                         'key' => "$configKey.secret",
                         'value' => $secret,
-                    ],
-                    [
-                        'key' => "$configKey.jaas_package_status",
-                        'value' => $packageStatus,
                     ],
                     [
                         'key' => "$configKey.jaas_host",
@@ -108,7 +104,7 @@ class SettingsApiTest extends TestCase
                     'full_key' => "$configKey.package_status",
                     'key' => 'package_status',
                     'rules' => [
-                        'required',
+                        'nullable',
                         'string',
                         'in:' . implode(',', PackageStatusEnum::getValues()),
                     ],
@@ -116,23 +112,11 @@ class SettingsApiTest extends TestCase
                     'readonly' => false,
                     'value' => $packageStatus,
                 ],
-                'jaas_package_status' => [
-                    'full_key' => "$configKey.jaas_package_status",
-                    'key' => 'jaas_package_status',
+                'jitsi_host' => [
+                    'full_key' => "$configKey.jitsi_host",
+                    'key' => 'jitsi_host',
                     'rules' => [
-                        'required',
-                        'string',
-                        'in:' . implode(',', PackageStatusEnum::getValues()),
-                    ],
-                    'public' => false,
-                    'readonly' => false,
-                    'value' => $packageStatus,
-                ],
-                'host' => [
-                    'full_key' => "$configKey.host",
-                    'key' => 'host',
-                    'rules' => [
-                        'required',
+                        'nullable',
                         'string'
                     ],
                     'public' => true,
@@ -143,7 +127,7 @@ class SettingsApiTest extends TestCase
                     'full_key' => "$configKey.jaas_host",
                     'key' => 'jaas_host',
                     'rules' => [
-                        'required',
+                        'nullable',
                         'string'
                     ],
                     'public' => true,
@@ -154,7 +138,7 @@ class SettingsApiTest extends TestCase
                     'full_key' => "$configKey.aud",
                     'key' => 'aud',
                     'rules' => [
-                        'required',
+                        'nullable',
                         'string'
                     ],
                     'public' => false,
@@ -165,7 +149,7 @@ class SettingsApiTest extends TestCase
                     'full_key' => "$configKey.kid",
                     'key' => 'kid',
                     'rules' => [
-                        'required',
+                        'nullable',
                         'string'
                     ],
                     'public' => false,
@@ -176,7 +160,7 @@ class SettingsApiTest extends TestCase
                     'full_key' => "$configKey.iss",
                     'key' => 'iss',
                     'rules' => [
-                        'required',
+                        'nullable',
                         'string'
                     ],
                     'public' => false,
@@ -209,7 +193,7 @@ class SettingsApiTest extends TestCase
                     'full_key' => "$configKey.private_key",
                     'key' => 'private_key',
                     'rules' => [
-                        'required',
+                        'nullable',
                         'string'
                     ],
                     'public' => false,
@@ -228,7 +212,7 @@ class SettingsApiTest extends TestCase
 
         $this->response->assertJsonFragment([
             $configKey => [
-                'host' => $host,
+                'jitsi_host' => $host,
                 'jaas_host' => $host,
             ],
         ]);
