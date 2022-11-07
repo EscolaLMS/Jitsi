@@ -39,6 +39,7 @@ class TestCase extends CoreTestCase
             EscolaLmsJitsiServiceProvider::class,
             EscolaLmsSettingsServiceProvider::class,
             EscolaLmsAuthServiceProvider::class,
+
         ];
     }
 
