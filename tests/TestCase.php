@@ -16,6 +16,7 @@ use EscolaLms\Lrs\Tests\Models\Client;
 use EscolaLms\Auth\Models\User;
 
 use EscolaLms\Core\Tests\TestCase as CoreTestCase;
+
 // use GuzzleHttp\Client;
 
 
@@ -38,7 +39,6 @@ class TestCase extends CoreTestCase
             EscolaLmsJitsiServiceProvider::class,
             EscolaLmsSettingsServiceProvider::class,
             EscolaLmsAuthServiceProvider::class,
-            PassportServiceProvider::class,
         ];
     }
 
