@@ -4,6 +4,7 @@ namespace EscolaLms\Jitsi\Tests;
 
 
 
+use EscolaLms\Auth\EscolaLmsAuthServiceProvider;
 use EscolaLms\Jitsi\Enum\PackageStatusEnum;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
@@ -36,6 +37,8 @@ class TestCase extends CoreTestCase
             ...parent::getPackageProviders($app),
             EscolaLmsJitsiServiceProvider::class,
             EscolaLmsSettingsServiceProvider::class,
+            EscolaLmsAuthServiceProvider::class,
+            PassportServiceProvider::class,
         ];
     }
 
