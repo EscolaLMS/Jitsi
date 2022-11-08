@@ -15,3 +15,4 @@ providers:
   - EscolaLms\Core\EscolaLmsServiceProvider
   - EscolaLms\Auth\EscolaLmsAuthServiceProvider
   - EscolaLms\Categories\EscolaLmsCategoriesServiceProvider
+  - EscolaLms\ModelFields\ModelFieldsServiceProvider

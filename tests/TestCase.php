@@ -4,6 +4,10 @@ namespace EscolaLms\Jitsi\Tests;
 
 
 
+use EscolaLms\Auth\EscolaLmsAuthServiceProvider;
+use EscolaLms\Jitsi\Enum\PackageStatusEnum;
+use EscolaLms\ModelFields\ModelFieldsServiceProvider;
+use EscolaLms\Core\EscolaLmsServiceProvider;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 use EscolaLms\Jitsi\EscolaLmsJitsiServiceProvider;
@@ -14,6 +18,7 @@ use EscolaLms\Lrs\Tests\Models\Client;
 use EscolaLms\Auth\Models\User;
 
 use EscolaLms\Core\Tests\TestCase as CoreTestCase;
+
 // use GuzzleHttp\Client;
 
 
@@ -35,6 +40,9 @@ class TestCase extends CoreTestCase
             ...parent::getPackageProviders($app),
             EscolaLmsJitsiServiceProvider::class,
             EscolaLmsSettingsServiceProvider::class,
+            EscolaLmsAuthServiceProvider::class,
+            ModelFieldsServiceProvider::class,
+            EscolaLmsServiceProvider::class,
         ];
     }
 
@@ -45,6 +53,13 @@ class TestCase extends CoreTestCase
 
         $app['config']->set('jitsi.app_id', 'app_id');
         $app['config']->set('jitsi.secret', 'secret');
-        $app['config']->set('jitsi.host', 'localhost');
+        $app['config']->set('jitsi.jitsi_host', 'localhost');
+        $app['config']->set('jitsi.package_status', PackageStatusEnum::ENABLED);
+
+        $app['config']->set('jaas.jaas_host', 'localhost');
+        $app['config']->set('jaas.aud', 'jitsi');
+        $app['config']->set('jaas.iss', 'chat');
+        $app['config']->set('jaas.sub', '');
+        $app['config']->set('jaas.kid', '');
     }
 }
