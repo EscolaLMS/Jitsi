@@ -12,8 +12,7 @@
   },
   "require-dev": {
     "phpunit/phpunit": "^9.0",
-    "orchestra/testbench": ">=5.0",
-    "escolalms/courses": "^0"
+    "orchestra/testbench": ">=5.0"
   },
   "license": "MIT",
   "authors": [
