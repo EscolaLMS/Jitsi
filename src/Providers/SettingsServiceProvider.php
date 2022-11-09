@@ -27,6 +27,7 @@ class SettingsServiceProvider extends ServiceProvider
             AdministrableConfig::registerConfig(self::CONFIG_KEY . '.aud', ['nullable', 'string'], false);
             AdministrableConfig::registerConfig(self::CONFIG_KEY . '.iss', ['nullable', 'string'], false);
             AdministrableConfig::registerConfig(self::CONFIG_KEY . '.kid', ['nullable', 'string'], false);
+            AdministrableConfig::registerConfig(self::CONFIG_KEY . '.sub', ['nullable', 'string'], false);
             AdministrableConfig::registerConfig(self::CONFIG_KEY . '.private_key', ['nullable', 'string'], false);
         }
     }
