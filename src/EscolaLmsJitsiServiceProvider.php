@@ -35,6 +35,10 @@ class EscolaLmsJitsiServiceProvider extends ServiceProvider
             __DIR__ . '/../config/jitsi.php',
             'jitsi'
         );
+        $this->mergeConfigFrom(
+            __DIR__ . '/../config/jaas.php',
+            'jaas'
+        );
 
         $this->app->register(SettingsServiceProvider::class);
     }
