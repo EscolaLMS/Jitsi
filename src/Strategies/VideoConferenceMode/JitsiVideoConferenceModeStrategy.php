@@ -30,6 +30,18 @@ class JitsiVideoConferenceModeStrategy implements VideoConferenceModeStrategyCon
         return null;
     }
 
+    public function getUrl(array $data): string
+    {
+        $jwt = $data[0] ?? '';
+        $channelName = $data[1] ?? '';
+
+        return 'https://' .
+        $this->config['jitsi_host'] .
+        '/' .
+        $channelName .
+        (!empty($jwt)  ? "?jwt=" . $jwt : "");
+    }
+
     private function shouldGenerateJWT(): bool
     {
         return !(!$this->config["app_id"] && !$this->config["secret"]);

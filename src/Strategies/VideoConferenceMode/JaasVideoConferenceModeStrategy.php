@@ -12,7 +12,7 @@ class JaasVideoConferenceModeStrategy implements VideoConferenceModeStrategyCont
 
     public function __construct()
     {
-        $this->config = config('jaas');
+        $this->config = config('jitsi');
         $this->jaasService = app(JaasServiceContract::class);
     }
 
@@ -28,6 +28,20 @@ class JaasVideoConferenceModeStrategy implements VideoConferenceModeStrategyCont
             );
         }
         return null;
+    }
+
+    public function getUrl(array $data): string
+    {
+        $jwt = $data[0] ?? '';
+        $channelName = $data[1] ?? '';
+
+        return 'https://' .
+        $this->config['jaas_host'] .
+        '/' .
+        $this->config['sub'] .
+        '/' .
+        $channelName .
+        (!empty($jwt)  ? "?jwt=" . $jwt : "");
     }
 
     private function shouldGenerateJWT(): bool

@@ -51,10 +51,10 @@ class ServiceTest extends TestCase
             'private_key_bits' => 1024,
             'private_key_type' => OPENSSL_KEYTYPE_RSA
         ]);
-        \Config::set('jaas.private_key', $private_key);
-        \Config::set('jaas.sub', Str::random(40));
-        \Config::set('jaas.kid', Str::random(40));
-        $config = config('jaas');
+        \Config::set('jitsi.private_key', $private_key);
+        \Config::set('jitsi.sub', Str::random(40));
+        \Config::set('jitsi.kid', Str::random(40));
+        $config = config('jitsi');
         $data = Jitsi::getChannelData($this->user, $this->faker->text(15));
         $jwt = $this->decodeJWT($data['data']['jwt']);
         $this->assertEquals($data['data']['domain'], $config['jaas_host']);
@@ -71,10 +71,10 @@ class ServiceTest extends TestCase
             'private_key_bits' => 1024,
             'private_key_type' => OPENSSL_KEYTYPE_RSA
         ]);
-        \Config::set('jaas.private_key', $private_key);
-        \Config::set('jaas.sub', Str::random(40));
-        \Config::set('jaas.kid', Str::random(40));
-        $config = config('jaas');
+        \Config::set('jitsi.private_key', $private_key);
+        \Config::set('jitsi.sub', Str::random(40));
+        \Config::set('jitsi.kid', Str::random(40));
+        $config = config('jitsi');
         $data = Jitsi::getChannelData($this->user, "Test Channel Name", true, ['foo' => 'bar'], ['bar' => 'foo']);
         $jwt = $this->decodeJWT($data['data']['jwt']);
         $this->assertEquals($data['data']['domain'], $config['jaas_host']);

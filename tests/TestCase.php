@@ -56,10 +56,10 @@ class TestCase extends CoreTestCase
         $app['config']->set('jitsi.jitsi_host', 'localhost');
         $app['config']->set('jitsi.package_status', PackageStatusEnum::ENABLED);
 
-        $app['config']->set('jaas.jaas_host', 'localhost');
-        $app['config']->set('jaas.aud', 'jitsi');
-        $app['config']->set('jaas.iss', 'chat');
-        $app['config']->set('jaas.sub', '');
-        $app['config']->set('jaas.kid', '');
+        $app['config']->set('jitsi.jaas_host', 'localhost');
+        $app['config']->set('jitsi.aud', 'jitsi');
+        $app['config']->set('jitsi.iss', 'chat');
+        $app['config']->set('jitsi.sub', '');
+        $app['config']->set('jitsi.kid', '');
     }
 }
