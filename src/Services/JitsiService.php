@@ -21,7 +21,7 @@ class JitsiService implements JitsiServiceContract
     public function __construct()
     {
         $this->mode = $this->getMode();
-        $this->config = $this->mode ? config($this->mode) : config(JitsiEnum::DEFAULT_CONFIG);
+        $this->config = config(JitsiEnum::DEFAULT_CONFIG);
     }
 
     public function generateJwt(
@@ -87,6 +87,7 @@ class JitsiService implements JitsiServiceContract
             ]
         ];
         $jwt = '';
+        $url = '';
         if ($this->mode) {
             $className = ucfirst($this->mode) .
                 'VideoConferenceModeStrategy';
@@ -98,6 +99,13 @@ class JitsiService implements JitsiServiceContract
                 $channelName,
                 $isModerator
             );
+            $url = StrategyHelper::useStrategyPattern(
+                $className,
+                'VideoConferenceModeStrategy',
+                'getUrl',
+                $jwt,
+                $channelName
+            );
         }
         if (!empty($jwt)) {
             $data['jwt'] = $jwt;
@@ -106,7 +114,11 @@ class JitsiService implements JitsiServiceContract
         return [
             'data' => $data,
             'domain' => $this->config[$this->mode . '_host'],
-            'url' => "https://" . $this->config[$this->mode . '_host'] . "/" .  $channelName . (!empty($jwt)  ? "?jwt=" . $jwt : ""),
+            'url' => $url ?: "https://" .
+                $this->config[$this->mode . '_host'] .
+                "/" .
+                $channelName .
+                (!empty($jwt)  ? "?jwt=" . $jwt : ""),
         ];
     }
 
@@ -141,7 +153,7 @@ class JitsiService implements JitsiServiceContract
         $jaasKeys = collect(['jaas_host', 'aud', 'iss', 'kid', 'private_key']);
         $jaasConfigUse = true;
         $jaasKeys->each(function (string $key) use (&$jaasConfigUse) {
-            if (!config('jaas.' . $key)) $jaasConfigUse = false;
+            if (!config('jitsi.' . $key)) $jaasConfigUse = false;
         });
         if ($jaasConfigUse) {
 
