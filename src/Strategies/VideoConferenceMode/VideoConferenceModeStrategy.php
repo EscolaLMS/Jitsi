@@ -19,4 +19,9 @@ class VideoConferenceModeStrategy
     {
         return $this->videoConferenceModeStrategy->generateJwt($data);
     }
+
+    public function getUrl(array $data): ?string
+    {
+        return $this->videoConferenceModeStrategy->getUrl($data);
+    }
 }
