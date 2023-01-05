@@ -23,7 +23,7 @@ class JaasService extends JitsiService implements JaasServiceContract
             'aud' => $this->config['aud'],
             'iss' => $this->config['iss'],
             'exp' => now()->addMinutes($expireInMinutes)->timestamp,
-            'sub' => $this->config['sub'],
+            'sub' => $this->config['app_id'],
             'room' => $room,
             'context' => [
                 'user' =>  $userData,

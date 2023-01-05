@@ -52,7 +52,7 @@ class ServiceTest extends TestCase
             'private_key_type' => OPENSSL_KEYTYPE_RSA
         ]);
         \Config::set('jitsi.private_key', $private_key);
-        \Config::set('jitsi.sub', Str::random(40));
+        \Config::set('jitsi.app_id', Str::random(40));
         \Config::set('jitsi.kid', Str::random(40));
         $config = config('jitsi');
         $data = Jitsi::getChannelData($this->user, $this->faker->text(15));
@@ -72,7 +72,7 @@ class ServiceTest extends TestCase
             'private_key_type' => OPENSSL_KEYTYPE_RSA
         ]);
         \Config::set('jitsi.private_key', $private_key);
-        \Config::set('jitsi.sub', Str::random(40));
+        \Config::set('jitsi.app_id', Str::random(40));
         \Config::set('jitsi.kid', Str::random(40));
         $config = config('jitsi');
         $data = Jitsi::getChannelData($this->user, "Test Channel Name", true, ['foo' => 'bar'], ['bar' => 'foo']);

@@ -41,7 +41,6 @@ class SettingsApiTest extends TestCase
         $appId = $this->faker->uuid;
         $secret = $this->faker->uuid;
         $aud = $this->faker->word;
-        $sub = $this->faker->word;
         $iss = $this->faker->word;
         $kid = $this->faker->word;
         $privateKey = $this->faker->word;
@@ -82,10 +81,6 @@ class SettingsApiTest extends TestCase
                     [
                         'key' => "$configKey.kid",
                         'value' => $kid,
-                    ],
-                    [
-                        'key' => "$configKey.sub",
-                        'value' => $sub,
                     ],
                     [
                         'key' => "$configKey.private_key",
@@ -171,17 +166,6 @@ class SettingsApiTest extends TestCase
                     'public' => false,
                     'readonly' => false,
                     'value' => $iss,
-                ],
-                'sub' => [
-                    'full_key' => "$configKey.sub",
-                    'key' => 'sub',
-                    'rules' => [
-                        'nullable',
-                        'string'
-                    ],
-                    'public' => false,
-                    'readonly' => false,
-                    'value' => $sub,
                 ],
                 'app_id' => [
                     'full_key' => "$configKey.app_id",
