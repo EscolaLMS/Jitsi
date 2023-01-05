@@ -78,6 +78,7 @@ class JitsiService implements JitsiServiceContract
         $channelName = $this->getChannelSlug($channelDisplayName);
         $data = [
             "domain" => $this->config[$this->mode . '_host'],
+            "app_id" => $this->config['app_id'],
             "roomName" => $channelName,
             "configOverwrite" => $configOverwrite,
             "interfaceConfigOverwrite" => $interfaceConfigOverwrite,
@@ -150,7 +151,7 @@ class JitsiService implements JitsiServiceContract
      */
     private function getMode(): string
     {
-        $jaasKeys = collect(['jaas_host', 'aud', 'iss', 'kid', 'private_key']);
+        $jaasKeys = collect(['app_id', 'jaas_host', 'aud', 'iss', 'kid', 'private_key']);
         $jaasConfigUse = true;
         $jaasKeys->each(function (string $key) use (&$jaasConfigUse) {
             if (!config('jitsi.' . $key)) $jaasConfigUse = false;
