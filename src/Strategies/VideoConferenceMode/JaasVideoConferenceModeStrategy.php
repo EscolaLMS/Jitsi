@@ -35,11 +35,11 @@ class JaasVideoConferenceModeStrategy implements VideoConferenceModeStrategyCont
         $jwt = $data[0] ?? '';
         $channelName = $data[1] ?? '';
 
+        $sub = strlen($this->config['sub']) > 0 ? $this->config['sub'] . '/' : '';
         return 'https://' .
         $this->config['jaas_host'] .
         '/' .
-        $this->config['sub'] .
-        '/' .
+        $sub .
         $channelName .
         (!empty($jwt)  ? "?jwt=" . $jwt : "");
     }
