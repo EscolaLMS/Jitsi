@@ -99,107 +99,105 @@ class SettingsApiTest extends TestCase
         $this->response->assertOk();
 
         $this->response->assertJsonFragment([
-            $configKey => [
-                'package_status' => [
-                    'full_key' => "$configKey.package_status",
-                    'key' => 'package_status',
-                    'rules' => [
-                        'nullable',
-                        'string',
-                        'in:' . implode(',', PackageStatusEnum::getValues()),
-                    ],
-                    'public' => false,
-                    'readonly' => false,
-                    'value' => $packageStatus,
+            'package_status' => [
+                'full_key' => "$configKey.package_status",
+                'key' => 'package_status',
+                'rules' => [
+                    'nullable',
+                    'string',
+                    'in:' . implode(',', PackageStatusEnum::getValues()),
                 ],
-                'jitsi_host' => [
-                    'full_key' => "$configKey.jitsi_host",
-                    'key' => 'jitsi_host',
-                    'rules' => [
-                        'nullable',
-                        'string'
-                    ],
-                    'public' => true,
-                    'readonly' => false,
-                    'value' => $host,
+                'public' => false,
+                'readonly' => false,
+                'value' => $packageStatus,
+            ],
+            'jitsi_host' => [
+                'full_key' => "$configKey.jitsi_host",
+                'key' => 'jitsi_host',
+                'rules' => [
+                    'nullable',
+                    'string'
                 ],
-                'jaas_host' => [
-                    'full_key' => "$configKey.jaas_host",
-                    'key' => 'jaas_host',
-                    'rules' => [
-                        'nullable',
-                        'string'
-                    ],
-                    'public' => true,
-                    'readonly' => false,
-                    'value' => $host,
+                'public' => true,
+                'readonly' => false,
+                'value' => $host,
+            ],
+            'jaas_host' => [
+                'full_key' => "$configKey.jaas_host",
+                'key' => 'jaas_host',
+                'rules' => [
+                    'nullable',
+                    'string'
                 ],
-                'aud' => [
-                    'full_key' => "$configKey.aud",
-                    'key' => 'aud',
-                    'rules' => [
-                        'nullable',
-                        'string'
-                    ],
-                    'public' => false,
-                    'readonly' => false,
-                    'value' => $aud,
+                'public' => true,
+                'readonly' => false,
+                'value' => $host,
+            ],
+            'aud' => [
+                'full_key' => "$configKey.aud",
+                'key' => 'aud',
+                'rules' => [
+                    'nullable',
+                    'string'
                 ],
-                'kid' => [
-                    'full_key' => "$configKey.kid",
-                    'key' => 'kid',
-                    'rules' => [
-                        'nullable',
-                        'string'
-                    ],
-                    'public' => false,
-                    'readonly' => false,
-                    'value' => $kid,
+                'public' => false,
+                'readonly' => false,
+                'value' => $aud,
+            ],
+            'kid' => [
+                'full_key' => "$configKey.kid",
+                'key' => 'kid',
+                'rules' => [
+                    'nullable',
+                    'string'
                 ],
-                'iss' => [
-                    'full_key' => "$configKey.iss",
-                    'key' => 'iss',
-                    'rules' => [
-                        'nullable',
-                        'string'
-                    ],
-                    'public' => false,
-                    'readonly' => false,
-                    'value' => $iss,
+                'public' => false,
+                'readonly' => false,
+                'value' => $kid,
+            ],
+            'iss' => [
+                'full_key' => "$configKey.iss",
+                'key' => 'iss',
+                'rules' => [
+                    'nullable',
+                    'string'
                 ],
-                'app_id' => [
-                    'full_key' => "$configKey.app_id",
-                    'key' => 'app_id',
-                    'rules' => [
-                        'nullable',
-                        'string',
-                    ],
-                    'public' => false,
-                    'value' => $appId,
-                    'readonly' => false,
+                'public' => false,
+                'readonly' => false,
+                'value' => $iss,
+            ],
+            'app_id' => [
+                'full_key' => "$configKey.app_id",
+                'key' => 'app_id',
+                'rules' => [
+                    'nullable',
+                    'string',
                 ],
-                'secret' => [
-                    'full_key' => "$configKey.secret",
-                    'key' => 'secret',
-                    'rules' => [
-                        'nullable',
-                        'string'
-                    ],
-                    'public' => false,
-                    'readonly' => false,
-                    'value' => $secret,
+                'public' => false,
+                'value' => $appId,
+                'readonly' => false,
+            ],
+            'secret' => [
+                'full_key' => "$configKey.secret",
+                'key' => 'secret',
+                'rules' => [
+                    'nullable',
+                    'string'
                 ],
-                'private_key' => [
-                    'full_key' => "$configKey.private_key",
-                    'key' => 'private_key',
-                    'rules' => [
-                        'nullable',
-                        'string'
-                    ],
-                    'public' => false,
-                    'readonly' => false,
-                    'value' => $privateKey,
+                'public' => false,
+                'readonly' => false,
+                'value' => $secret,
+            ],
+            'private_key' => [
+                'full_key' => "$configKey.private_key",
+                'key' => 'private_key',
+                'rules' => [
+                    'nullable',
+                    'string'
                 ],
+                'public' => false,
+                'readonly' => false,
+                'value' => $privateKey,
             ],
         ]);
 
@@ -211,10 +209,8 @@ class SettingsApiTest extends TestCase
         $this->response->assertOk();
 
         $this->response->assertJsonFragment([
-            $configKey => [
-                'jitsi_host' => $host,
-                'jaas_host' => $host,
-            ],
+            'jitsi_host' => $host,
+            'jaas_host' => $host,
         ]);
     }
 }

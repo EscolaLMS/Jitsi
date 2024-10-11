@@ -6,7 +6,7 @@ use EscolaLms\Jitsi\Enum\JitsiEnum;
 
 class StringHelper
 {
-    public static function convertToJitsiSlug(string $str, array $options = []): string
+    public static function convertToJitsiSlug(string $str, array $options = [], string|null $type = null, int|null $modelId = null, string|null $subModel = null): string
     {
         // Make sure string is in UTF-8 and strip invalid UTF-8 characters
         $str = mb_convert_encoding($str, 'UTF-8', mb_list_encodings());
@@ -43,7 +43,9 @@ class StringHelper
 
         // Remove delimiter from ends
         $str = trim($str, $options['delimiter']);
-        return $options['lowercase'] ? mb_strtolower($str, 'UTF-8') : $str;
+        $str = $options['lowercase'] ? mb_strtolower($str, 'UTF-8') : $str;
+        $suffix = ($type ? "_{$type}" : '') . ($modelId ? "_{$modelId}" : '') . ($subModel ? "_{$subModel}" : '');
+        return "{$str}{$suffix}";
     }
 
 }

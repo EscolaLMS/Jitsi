@@ -97,7 +97,7 @@ class JitsiService implements JitsiServiceContract
                 'VideoConferenceModeStrategy',
                 'generateJwt',
                 $user,
-                $channelName,
+                $channelDisplayName,
                 $isModerator
             );
             $url = StrategyHelper::useStrategyPattern(
@@ -105,7 +105,7 @@ class JitsiService implements JitsiServiceContract
                 'VideoConferenceModeStrategy',
                 'getUrl',
                 $jwt,
-                $channelName
+                $channelDisplayName
             );
         }
         if (!empty($jwt)) {

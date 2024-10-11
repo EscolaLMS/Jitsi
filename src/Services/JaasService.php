@@ -19,6 +19,16 @@ class JaasService extends JitsiService implements JaasServiceContract
         int $expireInMinutes = 60
     ): string {
         $userData = $this->getUserData($user, $isModerator);
+        $features = [];
+        if ($isModerator) {
+            $features = [
+                'livestreaming' => true,
+                'outbound-call' => true,
+                'sip-outbound-call' => false,
+                'transcriptions' => true,
+                'recording' => $this->config['recording'],
+            ];
+        }
         $payload = [
             'aud' => $this->config['aud'],
             'iss' => $this->config['iss'],
@@ -26,6 +36,7 @@ class JaasService extends JitsiService implements JaasServiceContract
             'sub' => $this->config['app_id'],
             'room' => $room,
             'context' => [
+                'features' => $features,
                 'user' =>  $userData,
             ],
         ];
