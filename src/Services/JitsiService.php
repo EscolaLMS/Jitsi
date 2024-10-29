@@ -75,11 +75,10 @@ class JitsiService implements JitsiServiceContract
 
             return ['error' => 'Package is disabled'];
         }
-        $channelName = $this->getChannelSlug($channelDisplayName);
         $data = [
             "domain" => $this->config[$this->mode . '_host'],
             "app_id" => $this->config['app_id'],
-            "roomName" => $channelName,
+            "roomName" => $channelDisplayName,
             "configOverwrite" => $configOverwrite,
             "interfaceConfigOverwrite" => $interfaceConfigOverwrite,
             "userInfo" =>  [
@@ -118,7 +117,7 @@ class JitsiService implements JitsiServiceContract
             'url' => $url ?: "https://" .
                 $this->config[$this->mode . '_host'] .
                 "/" .
-                $channelName .
+                $channelDisplayName .
                 (!empty($jwt)  ? "?jwt=" . $jwt : ""),
         ];
     }
