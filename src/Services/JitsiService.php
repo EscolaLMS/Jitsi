@@ -82,6 +82,7 @@ class JitsiService implements JitsiServiceContract
             "configOverwrite" => $configOverwrite,
             "interfaceConfigOverwrite" => $interfaceConfigOverwrite,
             "userInfo" =>  [
+                'id' => $user->id,
                 'displayName' => "{$user->first_name} {$user->last_name}",
                 'email' => $user->email,
             ]
